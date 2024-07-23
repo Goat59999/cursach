@@ -3,25 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Доставка еды</title>
+    <title>Главная страница</title>
     <!-- Подключение Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        header {
-            background-color: #ff6347;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-        .menu-item {
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .dish-card {
             margin: 10px;
-            padding: 20px;
-            text-align: center;
         }
         footer {
             background-color: #333;
@@ -32,60 +19,16 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>Доставка еды на дом</h1>
+    <header class="bg-dark text-white text-center py-4">
+        <h1>Наш Ресторан</h1>
     </header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Еда</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#home">Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#menu">Меню</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact">Контакты</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <section class="welcome text-center py-5" id="home">
-        <div class="container">
-            <h2>Добро пожаловать в нашу службу доставки еды!</h2>
-            <p class="lead">Мы предлагаем вам самые вкусные блюда с доставкой на дом.</p>
+    <section class="container py-5">
+        <h2 class="text-center">Наше Меню</h2>
+        <div id="dishList" class="row">
+            <!-- Карточки блюд будут добавляться здесь -->
         </div>
     </section>
-    <section class="menu py-5" id="menu">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="menu-item">
-                        <h3>Пицца Маргарита</h3>
-                        <p>Цена: 500 руб.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="menu-item">
-                        <h3>Суши Сет</h3>
-                        <p>Цена: 1200 руб.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="menu-item">
-                        <h3>Бургер Классический</h3>
-                        <p>Цена: 350 руб.</p>
-                    </div>
-                </div>
-                <!-- Добавьте больше элементов меню по мере необходимости -->
-            </div>
-        </div>
-    </section>
-    <footer class="text-center py-4" id="contact">
+    <footer class="text-center py-4">
         <div class="container">
             <p>Контакты: +7 (123) 456-78-90 | email@example.com</p>
         </div>
@@ -94,5 +37,28 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        async function loadDishes() {
+            const response = await fetch('/api/dishes');
+            const dishes = await response.json();
+            const dishList = document.getElementById('dishList');
+            dishList.innerHTML = '';
+            dishes.forEach(dish => {
+                const col = document.createElement('div');
+                col.classList.add('col-md-4');
+                col.innerHTML = `
+                    <div class="card dish-card">
+                        <div class="card-body">
+                            <h5 class="card-title">${dish.name}</h5>
+                            <p class="card-text">${dish.price} руб.</p>
+                        </div>
+                    </div>
+                `;
+                dishList.appendChild(col);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDishes);
+    </script>
 </body>
 </html>

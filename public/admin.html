@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель Администратора</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .admin-header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .menu-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <h1>Панель Администратора</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Админ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#menu">Управление Меню</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#orders">Заказы</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section class="menu-management py-5" id="menu">
+        <div class="container">
+            <h2 class="text-center">Управление Меню</h2>
+            <form id="dishForm">
+                <div class="form-group">
+                    <label for="dishName">Название блюда</label>
+                    <input type="text" class="form-control" id="dishName" placeholder="Введите название" required>
+                </div>
+                <div class="form-group">
+                    <label for="dishPrice">Цена блюда</label>
+                    <input type="number" step="0.01" class="form-control" id="dishPrice" placeholder="Введите цену" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Добавить блюдо</button>
+            </form>
+            <h3 class="text-center mt-5">Существующие блюда</h3>
+            <ul id="dishList" class="list-group"></ul>
+        </div>
+    </section>
+    <section class="orders py-5" id="orders">
+        <div class="container">
+            <h2 class="text-center">Заказы</h2>
+            <ul id="orderList" class="list-group"></ul>
+        </div>
+    </section>
+    <footer class="text-center py-4">
+        <div class="container">
+            <p>Контакты: +7 (123) 456-78-90 | email@example.com</p>
+        </div>
+    </footer>
+    <!-- Подключение Bootstrap JS и Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('dishForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const name = document.getElementById('dishName').value;
+            const price = document.getElementById('dishPrice').value;
+
+            const response = await fetch('/api/dishes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, price })
+            });
+
+            if (response.ok) {
+                loadDishes();
+                document.getElementById('dishForm').reset();
+            } else {
+                alert('Ошибка при добавлении блюда');
+            }
+        });
+
+        async function loadDishes() {
+            const response = await fetch('/api/dishes');
+            const dishes = await response.json();
+            const dishList = document.getElementById('dishList');
+            dishList.innerHTML = '';
+            dishes.forEach(dish => {
+                const li = document.createElement('li');
+                li.classList.add('list-group-item');
+                li.innerHTML = `
+                    ${dish.name} - ${dish.price} руб.
+                    <button class="btn btn-danger btn-sm float-right" onclick="deleteDish(${dish.id})">Удалить</button>
+                `;
+                dishList.appendChild(li);
+            });
+        }
+
+        async function deleteDish(id) {
+            const response = await fetch(`/api/dishes/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                loadDishes();
+            } else {
+                alert('Ошибка при удалении блюда');
+            }
+        }
+
+        async function loadOrders() {
+            const response = await fetch('/api/orders');
+            const orders = await response.json();
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = '';
+            orders.forEach(order => {
+                const li = document.createElement('li');
+                li.textContent = `Заказ: ${order.dishName}, Количество: ${order.quantity}, Общая сумма: ${order.totalPrice} руб.`;
+                li.classList.add('list-group-item');
+                orderList.appendChild(li);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDishes();
+            loadOrders();
+        });
+    </script>
+</body>
+</html>
