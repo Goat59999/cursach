@@ -9,6 +9,10 @@ module.exports = (sequelize) => {
         price: {
             type: DataTypes.FLOAT,
             allowNull: false
+        },
+        category: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     });
 

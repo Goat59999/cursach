@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Главная страница</title>
-    <!-- Подключение Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .dish-card {
@@ -24,6 +23,21 @@
     </header>
     <section class="container py-5">
         <h2 class="text-center">Наше Меню</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <select id="categorySelect" class="form-control" onchange="loadDishes()">
+                        <option value="">Все</option>
+                        <option value="category1">Категория 1</option>
+                        <option value="category2">Категория 2</option>
+                        <option value="category3">Категория 3</option>
+                        <option value="category4">Категория 4</option>
+                        <option value="category5">Категория 5</option>
+                        <option value="category6">Категория 6</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <div id="dishList" class="row">
             <!-- Карточки блюд будут добавляться здесь -->
         </div>
@@ -33,13 +47,13 @@
             <p>Контакты: +7 (123) 456-78-90 | email@example.com</p>
         </div>
     </footer>
-    <!-- Подключение Bootstrap JS и Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         async function loadDishes() {
-            const response = await fetch('/api/dishes');
+            const category = document.getElementById('categorySelect').value;
+            const response = await fetch(`/api/dishes${category ? `?category=${category}` : ''}`);
             const dishes = await response.json();
             const dishList = document.getElementById('dishList');
             dishList.innerHTML = '';
@@ -51,6 +65,7 @@
                         <div class="card-body">
                             <h5 class="card-title">${dish.name}</h5>
                             <p class="card-text">${dish.price} руб.</p>
+                            <p class="card-text">${dish.category}</p>
                         </div>
                     </div>
                 `;

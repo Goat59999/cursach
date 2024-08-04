@@ -7,7 +7,7 @@ const sequelize = new Sequelize({
 const Dish = require('./dish')(sequelize);
 const Order = require('./order')(sequelize);
 
-sequelize.sync().then(() => {
+sequelize.sync({ force: true }).then(() => { // Используйте force: true только в разработке
     console.log('Database & tables created!');
 });
 

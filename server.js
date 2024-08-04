@@ -32,7 +32,13 @@ app.post('/api/dishes', async (req, res) => {
 
 app.get('/api/dishes', async (req, res) => {
     try {
-        const dishes = await Dish.findAll();
+        const { category } = req.query;
+        let dishes;
+        if (category) {
+            dishes = await Dish.findAll({ where: { category } });
+        } else {
+            dishes = await Dish.findAll();
+        }
         res.status(200).json(dishes);
     } catch (error) {
         res.status(500).json({ error: error.message });

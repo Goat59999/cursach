@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель Администратора</title>
-    <!-- Подключение Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -66,6 +65,17 @@
                     <label for="dishPrice">Цена блюда</label>
                     <input type="number" step="0.01" class="form-control" id="dishPrice" placeholder="Введите цену" required>
                 </div>
+                <div class="form-group">
+                    <label for="dishCategory">Категория блюда</label>
+                    <select id="dishCategory" class="form-control" required>
+                        <option value="category1">Категория 1</option>
+                        <option value="category2">Категория 2</option>
+                        <option value="category3">Категория 3</option>
+                        <option value="category4">Категория 4</option>
+                        <option value="category5">Категория 5</option>
+                        <option value="category6">Категория 6</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Добавить блюдо</button>
             </form>
             <h3 class="text-center mt-5">Существующие блюда</h3>
@@ -83,7 +93,6 @@
             <p>Контакты: +7 (123) 456-78-90 | email@example.com</p>
         </div>
     </footer>
-    <!-- Подключение Bootstrap JS и Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -92,13 +101,14 @@
             event.preventDefault();
             const name = document.getElementById('dishName').value;
             const price = document.getElementById('dishPrice').value;
+            const category = document.getElementById('dishCategory').value;
 
             const response = await fetch('/api/dishes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name, price })
+                body: JSON.stringify({ name, price, category })
             });
 
             if (response.ok) {
@@ -118,7 +128,7 @@
                 const li = document.createElement('li');
                 li.classList.add('list-group-item');
                 li.innerHTML = `
-                    ${dish.name} - ${dish.price} руб.
+                    ${dish.name} - ${dish.price} руб. (${dish.category})
                     <button class="btn btn-danger btn-sm float-right" onclick="deleteDish(${dish.id})">Удалить</button>
                 `;
                 dishList.appendChild(li);
