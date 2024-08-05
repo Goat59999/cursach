@@ -8,6 +8,21 @@
     <style>
         .dish-card {
             margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 400px; /* Fixed height */
+            display: flex;
+            flex-direction: column;
+        }
+        .dish-image {
+            width: 100%; /* Make sure image fits the container */
+            height: 200px; /* Fixed height */
+            object-fit: cover; /* Cover the area, cropping if necessary */
+        }
+        .dish-card-body {
+            padding: 10px;
+            flex: 1; /* Allows the body to take up remaining space */
         }
         footer {
             background-color: #333;
@@ -62,9 +77,11 @@
                 col.classList.add('col-md-4');
                 col.innerHTML = `
                     <div class="card dish-card">
-                        <div class="card-body">
+                        <img src="${dish.imageUrl ? dish.imageUrl : '/path/to/default/image.jpg'}" class="dish-image" alt="${dish.name}">
+                        <div class="dish-card-body">
                             <h5 class="card-title">${dish.name}</h5>
                             <p class="card-text">${dish.price} руб.</p>
+                            <p class="card-text">${dish.description ? dish.description : 'Описание не доступно'}</p>
                             <p class="card-text">${dish.category}</p>
                         </div>
                     </div>

@@ -6,33 +6,40 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                notEmpty: true // Ensures name is not an empty string
+                notEmpty: true
             }
         },
         price: {
             type: DataTypes.FLOAT,
             allowNull: false,
             validate: {
-                isFloat: true, // Ensures price is a float
-                min: 0 // Ensures price is not negative
+                isFloat: true,
+                min: 0
             }
         },
         category: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                notEmpty: true // Ensures category is not an empty string
+                notEmpty: true
             }
+        },
+        description: {
+            type: DataTypes.TEXT, // Используйте TEXT для длинного текста
+            allowNull: true // Описание не обязательно
+        },
+        imageUrl: {
+            type: DataTypes.STRING,
+            allowNull: true // URL изображения не обязательно
         }
     }, {
-        // Optional: Define additional model options
         indexes: [
             {
                 unique: false,
-                fields: ['category'] // Adding an index on the category field
+                fields: ['category']
             }
         ],
-        timestamps: true // Adds createdAt and updatedAt fields
+        timestamps: true
     });
 
     return Dish;

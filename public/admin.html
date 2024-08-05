@@ -28,6 +28,34 @@
             text-align: center;
             padding: 10px 0;
         }
+        .dish-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            overflow: hidden;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            position: relative; /* For positioning the delete button */
+        }
+        .dish-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .dish-card-body {
+            padding: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .delete-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -56,7 +84,7 @@
     <section class="menu-management py-5" id="menu">
         <div class="container">
             <h2 class="text-center">Управление Меню</h2>
-            <form id="dishForm">
+            <form id="dishForm" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="dishName">Название блюда</label>
                     <input type="text" class="form-control" id="dishName" placeholder="Введите название" required>
@@ -75,6 +103,14 @@
                         <option value="category5">Категория 5</option>
                         <option value="category6">Категория 6</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="dishDescription">Описание блюда</label>
+                    <textarea class="form-control" id="dishDescription" rows="3" placeholder="Введите описание"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="dishImage">Фотография блюда</label>
+                    <input type="file" class="form-control-file" id="dishImage">
                 </div>
                 <button type="submit" class="btn btn-primary">Добавить блюдо</button>
             </form>
@@ -99,16 +135,16 @@
     <script>
         document.getElementById('dishForm').addEventListener('submit', async (event) => {
             event.preventDefault();
-            const name = document.getElementById('dishName').value;
-            const price = document.getElementById('dishPrice').value;
-            const category = document.getElementById('dishCategory').value;
+            const formData = new FormData();
+            formData.append('name', document.getElementById('dishName').value);
+            formData.append('price', document.getElementById('dishPrice').value);
+            formData.append('category', document.getElementById('dishCategory').value);
+            formData.append('description', document.getElementById('dishDescription').value);
+            formData.append('image', document.getElementById('dishImage').files[0]);
 
             const response = await fetch('/api/dishes', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name, price, category })
+                body: formData
             });
 
             if (response.ok) {
@@ -126,10 +162,16 @@
             dishList.innerHTML = '';
             dishes.forEach(dish => {
                 const li = document.createElement('li');
-                li.classList.add('list-group-item');
+                li.classList.add('list-group-item', 'dish-card');
                 li.innerHTML = `
-                    ${dish.name} - ${dish.price} руб. (${dish.category})
-                    <button class="btn btn-danger btn-sm float-right" onclick="deleteDish(${dish.id})">Удалить</button>
+                    <button class="btn btn-danger delete-button" onclick="deleteDish(${dish.id})">Удалить</button>
+                    <img src="${dish.imageUrl ? dish.imageUrl : '/path/to/default/image.jpg'}" class="dish-image" alt="${dish.name}">
+                    <div class="dish-card-body">
+                        <h5>${dish.name}</h5>
+                        <p>${dish.description ? dish.description : 'Описание не доступно'}</p>
+                        <p>${dish.price} руб.</p>
+                        <p>${dish.category}</p>
+                    </div>
                 `;
                 dishList.appendChild(li);
             });
