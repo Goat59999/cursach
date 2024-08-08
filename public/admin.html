@@ -29,14 +29,14 @@
             padding: 10px 0;
         }
         .dish-card {
+            margin: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin: 10px;
             overflow: hidden;
             height: 400px;
             display: flex;
             flex-direction: column;
-            position: relative; /* For positioning the delete button */
+            position: relative;
         }
         .dish-image {
             width: 100%;
@@ -101,7 +101,7 @@
                         <option value="Роллы">Роллы</option>
                         <option value="Закуски">Закуски</option>
                         <option value="Напитки">Напитки</option>
-                        <option value="Соусы">Соусы/option>
+                        <option value="Соусы">Соусы</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -115,7 +115,9 @@
                 <button type="submit" class="btn btn-primary">Добавить блюдо</button>
             </form>
             <h3 class="text-center mt-5">Существующие блюда</h3>
-            <ul id="dishList" class="list-group"></ul>
+            <div id="dishList" class="row">
+                <!-- Карточки блюд будут добавляться здесь -->
+            </div>
         </div>
     </section>
     <section class="orders py-5" id="orders">
@@ -161,19 +163,21 @@
             const dishList = document.getElementById('dishList');
             dishList.innerHTML = '';
             dishes.forEach(dish => {
-                const li = document.createElement('li');
-                li.classList.add('list-group-item', 'dish-card');
-                li.innerHTML = `
-                    <button class="btn btn-danger delete-button" onclick="deleteDish(${dish.id})">Удалить</button>
-                    <img src="${dish.imageUrl ? dish.imageUrl : '/path/to/default/image.jpg'}" class="dish-image" alt="${dish.name}">
-                    <div class="dish-card-body">
-                        <h5>${dish.name}</h5>
-                        <p>${dish.description ? dish.description : 'Описание не доступно'}</p>
-                        <p>${dish.price} руб.</p>
-                        <p>${dish.category}</p>
+                const col = document.createElement('div');
+                col.classList.add('col-md-4'); // Bootstrap grid column for 3 items per row
+                col.innerHTML = `
+                    <div class="card dish-card">
+                        <button class="btn btn-danger delete-button" onclick="deleteDish(${dish.id})">Удалить</button>
+                        <img src="${dish.imageUrl ? dish.imageUrl : '/path/to/default/image.jpg'}" class="dish-image" alt="${dish.name}">
+                        <div class="dish-card-body">
+                            <h5 class="card-title">${dish.name}</h5>
+                            <p class="card-text">${dish.price} руб.</p>
+                            <p class="card-text">${dish.description ? dish.description : 'Описание не доступно'}</p>
+                            <p class="card-text">${dish.category}</p>
+                        </div>
                     </div>
                 `;
-                dishList.appendChild(li);
+                dishList.appendChild(col);
             });
         }
 
