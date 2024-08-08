@@ -43,12 +43,12 @@
                 <div class="col">
                     <select id="categorySelect" class="form-control" onchange="loadDishes()">
                         <option value="">Все</option>
-                        <option value="category1">Категория 1</option>
-                        <option value="category2">Категория 2</option>
-                        <option value="category3">Категория 3</option>
-                        <option value="category4">Категория 4</option>
-                        <option value="category5">Категория 5</option>
-                        <option value="category6">Категория 6</option>
+                        <option value="Пицца">Пицца</option>
+                        <option value="Суши">Суши</option>
+                        <option value="Роллы">Роллы</option>
+                        <option value="Закуски">Закуски</option>
+                        <option value="Напитки">Напитки</option>
+                        <option value="Соусы">Соусы/option>
                     </select>
                 </div>
             </div>
@@ -59,7 +59,7 @@
     </section>
     <footer class="text-center py-4">
         <div class="container">
-            <p>Контакты: +7 (123) 456-78-90 | email@example.com</p>
+            <p>Контакты: +7 (905) 791-75-20 | eggor2208@gmail.com</p>
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -76,15 +76,17 @@
                 const col = document.createElement('div');
                 col.classList.add('col-md-4');
                 col.innerHTML = `
-                    <div class="card dish-card">
-                        <img src="${dish.imageUrl ? dish.imageUrl : '/path/to/default/image.jpg'}" class="dish-image" alt="${dish.name}">
-                        <div class="dish-card-body">
-                            <h5 class="card-title">${dish.name}</h5>
-                            <p class="card-text">${dish.price} руб.</p>
-                            <p class="card-text">${dish.description ? dish.description : 'Описание не доступно'}</p>
-                            <p class="card-text">${dish.category}</p>
+                    <a href="/dish.html?id=${dish.id}" class="text-decoration-none text-dark">
+                        <div class="card dish-card">
+                            <img src="${dish.imageUrl ? dish.imageUrl : '/path/to/default/image.jpg'}" class="dish-image" alt="${dish.name}">
+                            <div class="dish-card-body">
+                                <h5 class="card-title">${dish.name}</h5>
+                                <p class="card-text">${dish.price} руб.</p>
+                                <p class="card-text">${dish.description ? dish.description : 'Описание не доступно'}</p>
+                                <p class="card-text">${dish.category}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 `;
                 dishList.appendChild(col);
             });

@@ -28,6 +28,10 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
+app.get('/dish.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dish.html'));
+});
+
 // API маршруты
 app.post('/api/dishes', upload.single('image'), async (req, res) => {
     try {
@@ -54,6 +58,20 @@ app.get('/api/dishes', async (req, res) => {
         res.status(200).json(dishes);
     } catch (error) {
         console.error('Ошибка при получении блюд:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+app.get('/api/dishes/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const dish = await Dish.findByPk(id);
+        if (dish) {
+            res.status(200).json(dish);
+        } else {
+            res.status(404).json({ error: 'Dish not found' });
+        }
+    } catch (error) {
+        console.error('Ошибка при получении блюда:', error.message);
         res.status(500).json({ error: error.message });
     }
 });
