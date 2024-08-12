@@ -11,18 +11,32 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow: hidden;
-            height: 400px; /* Fixed height */
+            height: 400px; /* Фиксированная высота */
             display: flex;
             flex-direction: column;
+            position: relative; /* Для позиционирования кнопки */
         }
         .dish-image {
-            width: 100%; /* Make sure image fits the container */
-            height: 200px; /* Fixed height */
-            object-fit: cover; /* Cover the area, cropping if necessary */
+            width: 100%; /* Изображение занимает всю ширину контейнера */
+            height: 200px; /* Фиксированная высота */
+            object-fit: cover; /* Покрытие области, обрезая если нужно */
         }
         .dish-card-body {
             padding: 10px;
-            flex: 1; /* Allows the body to take up remaining space */
+            flex: 1; /* Позволяет телу занимать оставшееся пространство */
+            overflow: hidden; /* Скрытие переполнения */
+        }
+        .dish-card-body h5, .dish-card-body p {
+            margin: 0;
+            overflow: hidden; /* Скрытие текста, который не помещается */
+            text-overflow: ellipsis; /* Отображение "..." для переполненного текста */
+            white-space: nowrap; /* Однострочный текст */
+        }
+        .dish-card-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: auto; /* Выравнивание кнопки к нижней части карточки */
+            padding: 10px;
         }
         footer {
             background-color: #333;
@@ -57,14 +71,29 @@
             <!-- Карточки блюд будут добавляться здесь -->
         </div>        
     </section>
+
+    <!-- Корзина товаров -->
+    <section class="container py-5">
+        <h2 class="text-center">Корзина</h2>
+        <ul id="cartList" class="list-group">
+            <!-- Товары корзины будут добавляться здесь -->
+        </ul>
+        <p id="totalPrice" class="text-center">Итого: 0 руб.</p>
+        <div class="text-center">
+            <button class="btn btn-success" onclick="checkout()">Оформить заказ</button>
+        </div>
+    </section>
+
     <footer class="text-center py-4">
         <div class="container">
             <p>Контакты: +7 (905) 791-75-20 | eggor2208@gmail.com</p>
         </div>
     </footer>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/cart.js"></script> <!-- Подключаем cart.js -->
     <script>
         async function loadDishes() {
             const category = document.getElementById('categorySelect').value;
@@ -84,6 +113,9 @@
                                 <p class="card-text">${dish.price} руб.</p>
                                 <p class="card-text">${dish.description ? dish.description : 'Описание не доступно'}</p>
                                 <p class="card-text">${dish.category}</p>
+                            </div>
+                            <div class="dish-card-footer">
+                                <button class="btn btn-primary" onclick="addToCart(${dish.id}, '${dish.name}', ${dish.price})">Добавить в корзину</button>
                             </div>
                         </div>
                     </a>

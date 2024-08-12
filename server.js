@@ -97,9 +97,10 @@ app.post('/api/orders', async (req, res) => {
         res.status(201).json(order);
     } catch (error) {
         console.error('Ошибка при добавлении заказа:', error.message);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Произошла ошибка на сервере. Пожалуйста, попробуйте снова позже.' });
     }
 });
+
 
 app.get('/api/orders', async (req, res) => {
     try {

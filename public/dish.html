@@ -14,6 +14,9 @@
             height: 400px;
             object-fit: cover;
         }
+        .dish-description {
+            word-wrap: break-word; /* Добавлено свойство для переноса длинных слов */
+        }
         footer {
             background-color: #333;
             color: white;
@@ -57,7 +60,7 @@
                     </div>
                     <div class="col-md-6">
                         <h2>${dish.name}</h2>
-                        <p>${dish.description ? dish.description : 'Описание не доступно'}</p>
+                        <p class="dish-description">${dish.description ? dish.description : 'Описание не доступно'}</p>
                         <p><strong>Цена:</strong> ${dish.price} руб.</p>
                         <p><strong>Категория:</strong> ${dish.category}</p>
                     </div>
