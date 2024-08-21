@@ -43,13 +43,13 @@
             height: 200px;
             object-fit: cover;
         }
-        .dish-card-body {
-            padding: 10px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .dish-card-body h5, .dish-card-body p {
+            margin: 0;
+            overflow: hidden; /* Скрытие текста, который не помещается */
+            text-overflow: ellipsis; /* Отображение "..." для переполненного текста */
+            white-space: nowrap; /* Однострочный текст */
         }
+        
         .delete-button {
             position: absolute;
             bottom: 10px;

@@ -3,7 +3,7 @@ const router = express.Router();
 const { Order, Dish } = require('./index');
 
 // Создание заказа
-router.post('/api/orders', async (req, res) => {
+router.post('/models/order', async (req, res) => {
     try {
         const orderData = req.body.items; // ожидаем массив объектов с id, quantity и totalPrice
 
