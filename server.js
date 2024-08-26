@@ -4,12 +4,26 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const multer = require('multer'); // Подключение multer для загрузки файлов
 const { Dish, Order } = require('./models');
+const mongoose = require('mongoose');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+mongoose.connect('mongodb://localhost:27017/your_db_name', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log('Подключено к MongoDB'))
+  .catch(err => console.error('Ошибка подключения к MongoDB', err));
+  
+
 // Настройка multer
 const upload = multer({ dest: 'uploads/' }); // Директория для хранения загруженных файлов
+
+app.use(express.json());
+
+// Использование маршрутов для аутентификации
+app.use('/api/auth', authRoutes);
 
 // Middleware
 app.use(morgan('combined'));
